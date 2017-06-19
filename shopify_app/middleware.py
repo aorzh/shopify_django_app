@@ -1,16 +1,32 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
+
 import shopify
 
-class ConfigurationError(StandardError):
+
+class ConfigurationError(Exception):
     pass
 
+
 class LoginProtection(object):
-    def __init__(self):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
         if not settings.SHOPIFY_API_KEY or not settings.SHOPIFY_API_SECRET:
             raise ConfigurationError("SHOPIFY_API_KEY and SHOPIFY_API_SECRET must be set in settings")
         shopify.Session.setup(api_key=settings.SHOPIFY_API_KEY,
                               secret=settings.SHOPIFY_API_SECRET)
+
+    def __call__(self, request):
+        # Code to be executed for each request before
+        # the view (and later middleware) are called.
+
+        response = self.get_response(request)
+
+        # Code to be executed for each request/response after
+        # the view is called.
+
+        return response
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         if hasattr(request, 'session') and 'shopify' in request.session:

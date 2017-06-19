@@ -1,25 +1,26 @@
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.template import RequestContext
 from django.conf import settings
 import shopify
 
+
 def _return_address(request):
     return request.session.get('return_to') or reverse('root_path')
+
 
 def login(request):
     # Ask user for their ${shop}.myshopify.com address
 
     # If the ${shop}.myshopify.com address is already provided in the URL,
     # just skip to authenticate
-    if request.REQUEST.get('shop'):
+    if 'shop' in request.GET:
         return authenticate(request)
-    return render_to_response('shopify_app/login.html', {},
-                              context_instance=RequestContext(request))
+    return render(request, 'shopify_app/login.html', {})
+
 
 def authenticate(request):
-    shop = request.REQUEST.get('shop')
+    shop = request.GET.get('shop')
     if shop:
         scope = settings.SHOPIFY_API_SCOPE
         redirect_uri = request.build_absolute_uri(reverse('shopify_app.views.finalize'))
@@ -28,8 +29,9 @@ def authenticate(request):
 
     return redirect(_return_address(request))
 
+
 def finalize(request):
-    shop_url = request.REQUEST.get('shop')
+    shop_url = request.GET['shop']
     try:
         shopify_session = shopify.Session(shop_url)
         request.session['shopify'] = {
@@ -46,6 +48,7 @@ def finalize(request):
     response = redirect(_return_address(request))
     request.session.pop('return_to', None)
     return response
+
 
 def logout(request):
     request.session.pop('shopify', None)
