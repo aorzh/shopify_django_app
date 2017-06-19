@@ -2,24 +2,25 @@ import os
 from shopify_settings import *
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 try:
     from djangoappengine.settings_base import *
+
     USING_APP_ENGINE = True
 except ImportError:
     USING_APP_ENGINE = False
 
     DEBUG = True
-    TEMPLATE_DEBUG = DEBUG
 
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', '
+            'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'postgresql', '
             'NAME': os.path.join(SITE_ROOT, 'db-development.sqlite3'),
-            'USER': '',                      # Not used with sqlite3.
-            'PASSWORD': '',                  # Not used with sqlite3.
-            'HOST': '',                      # Set to empty string for localhost. Not used with 
-            'PORT': '',                      # Set to empty string for default. Not used with sq
+            'USER': '',  # Not used with sqlite3.
+            'PASSWORD': '',  # Not used with sqlite3.
+            'HOST': '',  # Set to empty string for localhost. Not used with
+            'PORT': '',  # Set to empty string for default. Not used with sq
         }
     }
 
@@ -65,40 +66,58 @@ STATICFILES_DIRS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '#w%yp9_5wnupojr=4o0mwap#!)y=q9ovu=o#xnytga7u5^bf27'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(SITE_ROOT, 'templates'), 'shopify_app/templates/shopify_app'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                # 'django.core.context_processors.i18n',
+                # 'django.core.context_processors.media',
+                'django.contrib.messages.context_processors.messages',
+                'shopify_app.context_processors.current_shop',
+            ],
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.request',
-    'django.contrib.messages.context_processors.messages',
-    'shopify_app.context_processors.current_shop',
-)
+            #'loaders': [
+            #    'django.template.loaders.filesystem.Loader',
+            #    'django.template.loaders.app_directories.Loader',
+            #],
+
+            'debug': True
+        },
+    },
+]
+
+"""
 if not USING_APP_ENGINE:
     TEMPLATE_CONTEXT_PROCESSORS += (
             'django.core.context_processors.static',
     )
+"""
 
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'shopify_app.middleware.LoginProtection',
-)
+]
 
 ROOT_URLCONF = 'urls'
 
+"""
 TEMPLATE_DIRS = (
     os.path.join(SITE_ROOT, 'templates'),
 )
+"""
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -117,6 +136,7 @@ else:
     INSTALLED_APPS += (
         'django.contrib.sites',
         'django.contrib.staticfiles',
+        'django.contrib.admin',
     )
 
 # A sample logging configuration. The only tangible logging
