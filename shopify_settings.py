@@ -9,9 +9,9 @@
 #
 # You can ignore this file in git using the following command:
 #   git update-index --assume-unchanged shopify_settings.py
-SHOPIFY_API_KEY = 'some_key'
-SHOPIFY_API_SECRET = 'some_secret'
+SHOPIFY_API_KEY = 'ec3a678006912358464c2c521b4dac2c'
+SHOPIFY_API_SECRET = 'de553f25735108429ae880e4d4e5a0b6'
 
 # See http://api.shopify.com/authentication.html for available scopes
 # to determine the permissions your app will need.
-SHOPIFY_API_SCOPE = ['read_products', 'read_orders']
+SHOPIFY_API_SCOPE = ['read_products', 'read_orders', 'write_orders']

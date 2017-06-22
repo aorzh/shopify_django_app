@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form action="/export/" method="post">
+        {% csrf_token %}
+        {{ ex_form }}
+        <input type="submit" value="Export"/>
+    </form>
+{% endblock %}

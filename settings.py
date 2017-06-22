@@ -63,6 +63,8 @@ STATICFILES_DIRS = (
     os.path.join(SITE_ROOT, 'static'),
 )
 
+ALLOWED_HOSTS = ['*']
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '#w%yp9_5wnupojr=4o0mwap#!)y=q9ovu=o#xnytga7u5^bf27'
 
@@ -126,6 +128,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'home',
     'shopify_app',
+    'multi_form_view',
 )
 if USING_APP_ENGINE:
     INSTALLED_APPS += (

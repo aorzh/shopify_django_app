@@ -1,40 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>{% block title %}Shopify Application{% endblock %}</title>
-  <link href="/static/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <title>{% block title %}Shopify Application{% endblock %}</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
 </head>
 
 <body>
-  <div id="header">
-    <h1><a href="{% url "root_path" %}">Shopify Demo Application</a></h1>
+<div class="container-fluid">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
 
-    <p id="login-link">
-      {% if current_shop %}
-          <span class="note">current shop</span> <a href="https://{{ current_shop.domain }}" class="shop_name">{{ current_shop.domain }}</a> <span class="note">|</span>
-          <a href="{% url "shopify_app.views.logout" %}">logout</a>
-      {% endif %}
-    </p>
-  </div>
+                        <a  class="navbar-brand" href="{% url "root_path" %}">Shopify Application</a>
 
-  <div id="container" class="clearfix">
-    <ul id="tabs">
-      <li><a href="{% url "root_path" %}">Home</a></li>
-      <li><a href="{% url "root_design" %}">Design Help</a></li>
-    </ul>
+            </div>
+        <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <p>
+                            {% if current_shop %}
+                                <span class="note">current shop</span>
+                                <a href="https://{{ current_shop.domain }}"
+                                   class="shop_name">{{ current_shop.domain }}</a>
+                                <span class="note">|</span>
+                                <a href="{% url "shopify_app_logout" %}">logout</a>
+                            {% endif %}
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-    <!-- Flash error & notice-->
-    {% if messages %}
-      {% for message in messages %}
-      <div{% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</div>
-      {% endfor %}
-    {% endif %}
+    </nav>
 
-    <!-- begin div.main-->
-    <div id="main">
-      {% block content %}{% endblock %}
+    <div class="container">
+        <ul id="tabs">
+            <!---
+          <li><a href="{% url "root_path" %}">Home</a></li>
+          <li><a href="{% url "root_design" %}">Design Help</a></li>
+          <li><a href="{% url "root_export" %}">Export</a></li>
+          <li><a href="{% url "root_import" %}">Import</a></li>
+
+        <li><a href="{% url "root_path" %}">Home</a></li>
+        --->
+        </ul>
+
+        <!-- Flash error & notice-->
+        {% if messages %}
+            {% for message in messages %}
+                <div{% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- begin div.main-->
+        <div id="main">
+            {% block content %}{% endblock %}
+        </div>
+        <!-- end div.main -->
     </div>
-    <!-- end div.main -->
-  </div>
+</div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
 </html>
